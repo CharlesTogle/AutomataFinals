@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import {
   isRouteErrorResponse,
   Links,
@@ -8,7 +9,8 @@ import {
 } from "react-router";
 
 import type { Route } from "./+types/root";
-import "./app.css";
+import "./global/globals.css";
+import { ThemeBootstrapScript } from "./global/theme";
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -19,20 +21,26 @@ export const links: Route.LinksFunction = () => [
   },
   {
     rel: "stylesheet",
-    href: "https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap",
+    href: "https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Sora:wght@400;500&display=swap",
   },
 ];
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html
+      data-app-ready="false"
+      data-theme="dark"
+      lang="en"
+      suppressHydrationWarning
+    >
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <script dangerouslySetInnerHTML={{ __html: ThemeBootstrapScript }} />
         <Meta />
         <Links />
       </head>
-      <body>
+      <body className="bg-[var(--clr-bg)] text-[var(--clr-text)] antialiased">
         {children}
         <ScrollRestoration />
         <Scripts />
@@ -42,6 +50,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
+  useEffect(() => {
+    document.documentElement.setAttribute("data-app-ready", "true");
+  }, []);
+
   return <Outlet />;
 }
 
@@ -62,11 +74,11 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
   }
 
   return (
-    <main className="pt-16 p-4 container mx-auto">
-      <h1>{message}</h1>
-      <p>{details}</p>
+    <main className="mx-auto flex min-h-screen max-w-3xl flex-col justify-center gap-4 px-6 py-16">
+      <h1 className="font-display text-4xl text-[var(--clr-text)]">{message}</h1>
+      <p className="max-w-[60ch] text-[var(--clr-text-muted)]">{details}</p>
       {stack && (
-        <pre className="w-full p-4 overflow-x-auto">
+        <pre className="overflow-x-auto rounded-[var(--radius)] border border-[var(--clr-border)] bg-[var(--clr-surface)] p-4 text-sm text-[var(--clr-lavender)]">
           <code>{stack}</code>
         </pre>
       )}

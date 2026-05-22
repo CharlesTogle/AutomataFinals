@@ -1,0 +1,74 @@
+import type { ProcedureRunModel } from "~/services/visualization/types";
+
+import { SkipButton } from "./skip_button";
+
+type ProcedureViewProps = {
+  RunModel: ProcedureRunModel;
+  CurrentStatus: string;
+  ShowSkipButton: boolean;
+  ShowFinalValue: boolean;
+  VisibleProcedureStepCount: number;
+  OnSkip: () => void;
+};
+
+export function ProcedureView({
+  RunModel,
+  CurrentStatus,
+  ShowSkipButton,
+  ShowFinalValue,
+  VisibleProcedureStepCount,
+  OnSkip,
+}: ProcedureViewProps) {
+  const VisibleSteps = RunModel.Steps.slice(0, VisibleProcedureStepCount);
+  const ActiveStepIndex = Math.max(VisibleProcedureStepCount - 1, 0);
+
+  return (
+    <section className="viz-wrapper anim-fade-up anim-delay-5" data-testid="procedure-view">
+      <p className={`viz-status${ShowSkipButton ? " is-computing" : ""}`}>
+        {CurrentStatus}
+      </p>
+      <div className="procedure-view">
+        <div className="procedure-steps">
+          {VisibleSteps.map((Step, Index) => {
+            const StepClasses = [
+              "procedure-step",
+              Index === ActiveStepIndex && ShowSkipButton ? "is-active" : "",
+              Index < ActiveStepIndex ? "is-dimmed" : "",
+            ]
+              .filter(Boolean)
+              .join(" ");
+
+            return (
+              <article className={StepClasses} key={Step.Id}>
+                <div className="procedure-step-header">
+                  <span className="procedure-step-label">{Step.Label}</span>
+                  <span className="procedure-step-value">{Step.Title}</span>
+                </div>
+                <p className="procedure-step-copy">{Step.Body}</p>
+                {Step.Emphasis ? (
+                  <p className="procedure-step-equation">{Step.Emphasis}</p>
+                ) : null}
+              </article>
+            );
+          })}
+        </div>
+        <SkipButton IsVisible={ShowSkipButton} OnSkip={OnSkip} />
+        {ShowFinalValue ? (
+          <div className="procedure-final" data-testid="procedure-final-value">
+            <p className="procedure-final-title">{RunModel.FinalValue.Label}</p>
+            <div className="detail-card">
+              <span className="detail-card-label">{RunModel.FinalValue.Notation}</span>
+              <p className="procedure-final-value">{RunModel.FinalValue.Number}</p>
+            </div>
+            {RunModel.FinalValue.DetailText ? (
+              <div className="detail-card">
+                <span className="detail-card-label">Details</span>
+                <p className="procedure-step-copy">{RunModel.FinalValue.DetailText}</p>
+              </div>
+            ) : null}
+          </div>
+        ) : null}
+      </div>
+    </section>
+  );
+}
