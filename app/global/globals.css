@@ -1365,10 +1365,19 @@ button {
 
 .compute-form {
   display: flex;
+  justify-content: center;
   align-items: flex-end;
   flex-wrap: wrap;
   gap: var(--sp-4);
   margin-bottom: var(--sp-4);
+}
+
+.compute-form-fields {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+  gap: var(--sp-4);
+  flex: 0 1 48rem;
+  width: min(100%, 48rem);
 }
 
 .form-group {
@@ -1378,9 +1387,7 @@ button {
 }
 
 .compute-form .form-group {
-  width: auto;
-  min-width: min(100%, 18rem);
-  flex: 1 1 18rem;
+  min-width: 0;
 }
 
 .form-label {
@@ -1917,6 +1924,12 @@ button {
 
   .compute-form .form-group {
     width: 100%;
+  }
+
+  .compute-form-fields {
+    width: 100%;
+    flex-basis: 100%;
+    grid-template-columns: 1fr;
   }
 
   .viz-footer {
