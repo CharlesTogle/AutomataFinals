@@ -228,7 +228,7 @@ button {
 
 .hero-label,
 .section-label,
-.page-hero-tag {
+.page-hero-number {
   margin-bottom: var(--sp-5);
   font-size: var(--text-xs);
   letter-spacing: 0.1em;
@@ -306,13 +306,6 @@ button {
   font-weight: 300;
   line-height: 1;
   letter-spacing: -0.02em;
-  color: var(--clr-text-faint);
-}
-
-.seq-tag {
-  font-size: var(--text-xs);
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
   color: var(--clr-text-faint);
 }
 
@@ -964,7 +957,7 @@ button {
 
 .hero-label,
 .section-label,
-.page-hero-tag,
+.page-hero-number,
 .page-hero-back,
 .footer-heading,
 .output-title,
@@ -1204,13 +1197,6 @@ button {
   line-height: 1;
 }
 
-.seq-tag {
-  color: var(--clr-text-faint);
-  font-size: var(--text-xs);
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-}
-
 .seq-name {
   margin-bottom: var(--sp-3);
   color: var(--clr-text);
@@ -1262,7 +1248,7 @@ button {
   color: var(--clr-text-muted);
 }
 
-.page-hero-tag {
+.page-hero-number {
   margin-bottom: var(--sp-4);
 }
 
@@ -1875,6 +1861,25 @@ button {
 
 .footer-text {
   letter-spacing: 0.02em;
+}
+
+.footer-references {
+  display: grid;
+  gap: var(--sp-3);
+  max-width: 78ch;
+}
+
+.footer-reference-list {
+  display: grid;
+  gap: var(--sp-3);
+  padding-left: 1.25rem;
+}
+
+.footer-reference-item {
+  color: var(--clr-text-muted);
+  font-size: var(--text-xs);
+  line-height: 1.75;
+  overflow-wrap: anywhere;
 }
 
 @media (max-width: 768px) {

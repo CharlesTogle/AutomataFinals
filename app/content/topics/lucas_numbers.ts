@@ -1,4 +1,5 @@
 import { TopicInputLimits } from "~/global/constants";
+import { ScholarlyReferences } from "./scholarly_references";
 
 import type { TopicContent } from "./topic_types";
 
@@ -6,22 +7,33 @@ export const LucasNumbersContent: TopicContent = {
   Slug: "lucas-numbers",
   Path: "/lucas-numbers",
   Number: "02",
-  Tag: "Variant",
   ViewKind: "sequence",
   BackLabel: "All Topics",
   TitleParts: [{ Text: "Lucas" }, { Text: "Numbers", IsEmphasized: true }],
   HeroDescription:
-    "Lucas Numbers use the same recurrence as Fibonacci, but they begin with L(0) = 2 and L(1) = 1. That change in seeds creates a different sequence while preserving the same recursive structure.",
+    `With the zero-based seeds L(0) = 2 and L(1) = 1, Lucas numbers follow the same recurrence as Fibonacci while producing a distinct companion sequence ${ScholarlyReferences.LucasSequence.ParentheticalCitation}.`,
   DescriptionHtml:
-    "Lucas Numbers are named after the French mathematician Edouard Lucas, who studied related recurrence patterns in the nineteenth century. The page highlights how identical recursion can still produce a different sequence once the starting values change.",
+    "MacTutor notes that Edouard Lucas studied Fibonacci-related number theory in the nineteenth century, and MathWorld describes Lucas numbers as the companion sequence that keeps Fibonacci's recurrence but changes the starting values (O'Connor & Robertson, 1996; Weisstein, n.d.-b).",
   DescriptionCards: [
-    { Label: "Associated Mathematician", Value: "Edouard Lucas" },
-    { Label: "Seeds", Value: "L(0) = 2, L(1) = 1" },
-    { Label: "Constraint", Value: "2 to 100,000 terms" },
+    {
+      Label: "Named for",
+      Value: "Edouard Lucas",
+      Detail: `Biographical context ${ScholarlyReferences.LucasHistory.ParentheticalCitation}.`,
+    },
+    {
+      Label: "Zero-based seeds",
+      Value: "L(0) = 2, L(1) = 1",
+      Detail: `Sequence definition ${ScholarlyReferences.LucasSequence.ParentheticalCitation}.`,
+    },
+    {
+      Label: "Family relation",
+      Value: "Same recurrence as Fibonacci",
+      Detail: `Companion-sequence description ${ScholarlyReferences.LucasSequence.ParentheticalCitation}.`,
+    },
   ],
   Definition: {
     IntroHtml:
-      "The Lucas Numbers <strong>L<sub>n</sub></strong> have the initial values",
+      `The Lucas numbers <strong>L<sub>n</sub></strong> have the initial values ${ScholarlyReferences.LucasSequence.ParentheticalCitation}.`,
     SeedHtml: "L<sub>0</sub> = 2 &nbsp;,&nbsp; L<sub>1</sub> = 1",
     LabelHtml: "And the recursion:",
     FormulaHtml:
@@ -37,7 +49,7 @@ export const LucasNumbersContent: TopicContent = {
       Minimum: TopicInputLimits.SequenceTermsMin,
       Maximum: TopicInputLimits.SequenceTermsMax,
       HelpText:
-        "Choose from 2 to 100,000 terms. The first 100 terms are animated.",
+        "Choose from 1 to 100,000 terms. The first 100 terms are animated.",
     },
   ],
   Legend: [

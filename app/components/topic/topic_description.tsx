@@ -19,6 +19,9 @@ export function TopicDescription({
           <article className="detail-card" key={DescriptionCard.Label}>
             <span className="detail-card-label">{DescriptionCard.Label}</span>
             <h2 className="detail-card-title">{DescriptionCard.Value}</h2>
+            {DescriptionCard.Detail ? (
+              <p className="detail-card-copy">{DescriptionCard.Detail}</p>
+            ) : null}
           </article>
         ))}
       </section>

@@ -6,6 +6,7 @@ export type TitlePart = {
 export type TopicDescriptionCard = {
   Label: string;
   Value: string;
+  Detail?: string;
 };
 
 export type TopicDefinition = {
@@ -25,6 +26,7 @@ export type TopicInputField = {
   InputMode?: "numeric" | "text";
   Minimum?: number;
   Maximum?: number;
+  MinimumLength?: number;
   MaximumLength?: number;
   ConstraintText?: string;
   HelpText: string;
@@ -49,7 +51,6 @@ export type TopicContent = {
   Slug: string;
   Path: string;
   Number: string;
-  Tag: string;
   ViewKind: TopicViewKind;
   BackLabel: string;
   TitleParts: TitlePart[];
@@ -64,7 +65,6 @@ export type TopicContent = {
 
 export type LandingCard = {
   Number: string;
-  Tag: string;
   Name: string;
   Description: string;
   Preview: string;

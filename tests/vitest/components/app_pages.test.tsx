@@ -3,6 +3,7 @@ import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router";
 import { describe, expect, it } from "vitest";
 
+import { EuclideanContent } from "~/content/topics/euclidean";
 import { SequenceView } from "~/components/visualization/sequence_view";
 import { FibonacciContent } from "~/content/topics/fibonacci";
 import { PalindromeContent } from "~/content/topics/palindrome";
@@ -21,8 +22,16 @@ describe("page components", () => {
     expect(screen.getByText("Seven Topics")).toBeInTheDocument();
     expect(screen.getByTestId("landing-card-fibonacci")).toBeInTheDocument();
     expect(screen.getByTestId("landing-card-lucas-numbers")).toBeInTheDocument();
+    expect(screen.queryByText(/^Recursive$/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/^Variant$/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/^Generalized$/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/^Procedure$/)).not.toBeInTheDocument();
     expect(
       screen.getByText(/FINAL PROJECT - Automata Theory and Formal Languages/i),
+    ).toBeInTheDocument();
+    expect(screen.getByText("References")).toBeInTheDocument();
+    expect(
+      screen.getByText(/Britannica Editors\. \(2026, March 10\)\. Euclidean algorithm\./i),
     ).toBeInTheDocument();
   });
 
@@ -42,6 +51,7 @@ describe("page components", () => {
     expect(screen.getByTestId("validation-message")).toHaveTextContent(
       "Enter number of terms.",
     );
+    expect(screen.queryByText(/01\s*-\s*Recursive/i)).not.toBeInTheDocument();
   });
 
   it("keeps wide sequence values separated and comma-formatted", () => {
@@ -66,7 +76,7 @@ describe("page components", () => {
     expect(screen.getAllByTestId("sequence-item-divider")).not.toHaveLength(0);
   });
 
-  it("renders the palindrome input as text so letters are accepted", () => {
+  it("renders the palindrome input as text with the updated length rules", () => {
     render(
       <MemoryRouter>
         <TopicPage Content={PalindromeContent} />
@@ -74,5 +84,36 @@ describe("page components", () => {
     );
 
     expect(screen.getByTestId("input-Candidate")).toHaveAttribute("type", "text");
+    expect(screen.getByTestId("input-Candidate")).toHaveAttribute("maxlength", "1000");
+    expect(screen.getByTestId("input-Candidate")).toHaveAttribute("minlength", "0");
+  });
+
+  it("renders scholarly citations on topic pages without the landing references block", () => {
+    render(
+      <MemoryRouter>
+        <TopicPage Content={FibonacciContent} />
+      </MemoryRouter>,
+    );
+
+    expect(
+      screen.getAllByText(/\(Chandra & Weisstein, n\.d\.\)/i),
+    ).not.toHaveLength(0);
+    expect(screen.queryByText("References")).not.toBeInTheDocument();
+  });
+
+  it("renders Euclidean guidance that ties repeated division to gcd and lcm", () => {
+    render(
+      <MemoryRouter>
+        <TopicPage Content={EuclideanContent} />
+      </MemoryRouter>,
+    );
+
+    expect(
+      screen.getByText(/previous divisor becomes the next dividend/i),
+    ).toBeInTheDocument();
+    expect(screen.getByText(/Last nonzero remainder = GCD/i)).toBeInTheDocument();
+    expect(
+      screen.getByText(/Use the gcd to compute the least common multiple\./i),
+    ).toBeInTheDocument();
   });
 });

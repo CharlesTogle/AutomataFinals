@@ -2,6 +2,7 @@ import { Fragment } from "react";
 import { Link } from "react-router";
 
 import { LandingCards, LandingHero } from "~/content/topics/landing";
+import { LandingReferences } from "~/content/topics/scholarly_references";
 
 import { SiteShell } from "~/components/layout/site_shell";
 
@@ -25,7 +26,7 @@ function RenderLandingTitle() {
 
 export function LandingPage() {
   return (
-    <SiteShell>
+    <SiteShell FooterReferences={LandingReferences}>
       <section className="hero">
         <p className="hero-label anim-fade-up anim-delay-1">{LandingHero.Label}</p>
         <h1 className="hero-title anim-fade-up anim-delay-2">{RenderLandingTitle()}</h1>
@@ -44,7 +45,6 @@ export function LandingPage() {
             >
               <div className="seq-card-head">
                 <span className="seq-number">{LandingCard.Number}</span>
-                <span className="seq-tag">{LandingCard.Tag}</span>
               </div>
               <h2 className="seq-name">{LandingCard.Name}</h2>
               <p className="seq-desc">{LandingCard.Description}</p>

@@ -1,4 +1,5 @@
 import type { LandingCard } from "./topic_types";
+import { ScholarlyReferences } from "./scholarly_references";
 
 export const LandingHero = {
   Label: "Mathematical Foundations",
@@ -7,70 +8,63 @@ export const LandingHero = {
     { Text: "Computation Lab", IsEmphasized: true },
   ],
   Description:
-    "Eight mathematical and algorithmic topics presented through one consistent interface. Explore recursive sequences, arithmetic procedures, and step-driven transformations without leaving the approved design system.",
+    "Seven mathematical and algorithmic topics presented through one consistent interface. Explore each visualization without leaving the approved design system.",
 };
 
 export const LandingCards: LandingCard[] = [
   {
     Number: "01",
-    Tag: "Recursive",
     Name: "Fibonacci",
     Description:
-      "Each term is the sum of the two preceding terms, starting from 0 and 1.",
+      `Each term is the sum of the two preceding terms, with 0 and 1 as the standard zero-based seeds ${ScholarlyReferences.FibonacciSequence.ParentheticalCitation}.`,
     Preview: "0, 1, 1, 2, 3, 5, 8, 13 ...",
     Path: "/fibonacci",
   },
   {
     Number: "02",
-    Tag: "Variant",
     Name: "Lucas Numbers",
     Description:
-      "The same recurrence as Fibonacci, but seeded with 2 and 1.",
+      `The same recurrence as Fibonacci, but with the zero-based seeds 2 and 1 ${ScholarlyReferences.LucasSequence.ParentheticalCitation}.`,
     Preview: "2, 1, 3, 4, 7, 11, 18, 29 ...",
     Path: "/lucas-numbers",
   },
   {
     Number: "03",
-    Tag: "Generalized",
     Name: "Tribonacci",
     Description:
-      "Each term depends on the three preceding values instead of two.",
+      `Each term depends on the three preceding values, often with zero-based seeds 0, 0, and 1 ${ScholarlyReferences.TribonacciSequence.ParentheticalCitation}.`,
     Preview: "0, 0, 1, 1, 2, 4, 7, 13 ...",
     Path: "/tribonacci",
   },
   {
     Number: "04",
-    Tag: "Procedure",
     Name: "Palindrome",
     Description:
-      "Check whether a numeric candidate reads the same in both directions.",
+      `A palindrome reads the same backward and forward, whether it is a word, number, sentence, or verse ${ScholarlyReferences.Palindrome.ParentheticalCitation}.`,
     Preview: "1331 -> palindrome",
     Path: "/palindrome",
   },
   {
     Number: "05",
-    Tag: "Procedure",
     Name: "Division",
     Description:
-      "Break an integer pair into dividend, divisor, quotient, and remainder.",
+      `Division with remainder finds q and r such that a = bq + r and 0 <= r < |b| ${ScholarlyReferences.Division.ParentheticalCitation}.`,
     Preview: "42 = 5(8) + 2",
     Path: "/division",
   },
   {
     Number: "06",
-    Tag: "Procedure",
     Name: "Euclidean",
     Description:
-      "Use repeated division steps to compute the greatest common divisor.",
+      `Repeated division with remainder yields the greatest common divisor ${ScholarlyReferences.EuclideanAlgorithm.ParentheticalCitation}.`,
     Preview: "252, 105 -> gcd 21",
     Path: "/euclidean",
   },
   {
     Number: "07",
-    Tag: "Iterative",
     Name: "Collatz",
     Description:
-      "Generate a value chain by halving even numbers or applying 3n + 1 to odd numbers.",
+      `Even values are halved and odd values become 3n + 1 in the Collatz map ${ScholarlyReferences.CollatzProblem.ParentheticalCitation}.`,
     Preview: "7, 22, 11, 34, 17, 52 ...",
     Path: "/collatz",
   },
