@@ -21,6 +21,12 @@ export function ProcedureView({
 }: ProcedureViewProps) {
   const VisibleSteps = RunModel.Steps.slice(0, VisibleProcedureStepCount);
   const ActiveStepIndex = Math.max(VisibleProcedureStepCount - 1, 0);
+  const FinalBlocks = RunModel.FinalValue.Blocks ?? [
+    {
+      Label: RunModel.FinalValue.Notation,
+      Value: RunModel.FinalValue.Number,
+    },
+  ];
 
   return (
     <section className="viz-wrapper anim-fade-up anim-delay-5" data-testid="procedure-view">
@@ -56,12 +62,16 @@ export function ProcedureView({
         {ShowFinalValue ? (
           <div className="procedure-final" data-testid="procedure-final-value">
             <p className="procedure-final-title">{RunModel.FinalValue.Label}</p>
-            <div className="detail-card">
-              <span className="detail-card-label">{RunModel.FinalValue.Notation}</span>
-              <p className="procedure-final-value">{RunModel.FinalValue.Number}</p>
+            <div className="procedure-final-blocks">
+              {FinalBlocks.map((Block) => (
+                <div className="detail-card procedure-final-card" key={Block.Label}>
+                  <span className="detail-card-label">{Block.Label}</span>
+                  <p className="procedure-final-value">{Block.Value}</p>
+                </div>
+              ))}
             </div>
             {RunModel.FinalValue.DetailText ? (
-              <div className="detail-card">
+              <div className="detail-card procedure-final-detail">
                 <span className="detail-card-label">Details</span>
                 <p className="procedure-step-copy">{RunModel.FinalValue.DetailText}</p>
               </div>

@@ -59,6 +59,16 @@ export function BuildEuclideanRun(
     Label: "Final Result",
     Notation: `gcd(${FormatNumber(OriginalDividend)}, ${FormatNumber(OriginalDivisor)})`,
     Number: FormatNumber(GreatestCommonDivisor),
+    Blocks: [
+      {
+        Label: "GCD",
+        Value: FormatNumber(GreatestCommonDivisor),
+      },
+      {
+        Label: "LCM",
+        Value: FormatNumber(LeastCommonMultiple),
+      },
+    ],
     DetailText:
       `lcm = (${FormatNumber(OriginalDividend)} x ${FormatNumber(OriginalDivisor)}) / ${FormatNumber(GreatestCommonDivisor)} = ${FormatNumber(LeastCommonMultiple)}`,
   });

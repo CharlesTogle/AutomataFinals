@@ -87,6 +87,10 @@ describe("topic services", () => {
     const RunModel = BuildEuclideanRun(252, 105);
 
     expect(RunModel.FinalValue.Number).toBe("21");
+    expect(RunModel.FinalValue.Blocks).toEqual([
+      { Label: "GCD", Value: "21" },
+      { Label: "LCM", Value: "1,260" },
+    ]);
     expect(RunModel.FinalValue.DetailText).toBe("lcm = (252 x 105) / 21 = 1,260");
   });
 

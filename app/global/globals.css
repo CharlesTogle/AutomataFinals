@@ -1822,7 +1822,7 @@ button {
 
 .procedure-final {
   display: grid;
-  gap: var(--sp-2);
+  gap: var(--sp-3);
 }
 
 .procedure-final-title {
@@ -1830,6 +1830,17 @@ button {
   font-size: var(--text-xs);
   letter-spacing: 0.08em;
   text-transform: uppercase;
+}
+
+.procedure-final-blocks {
+  display: grid;
+  gap: var(--sp-3);
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.procedure-final-card,
+.procedure-final-detail {
+  min-height: 100%;
 }
 
 .procedure-final-value {
@@ -1911,6 +1922,10 @@ button {
   .viz-footer {
     flex-direction: column-reverse;
     align-items: flex-start;
+  }
+
+  .procedure-final-blocks {
+    grid-template-columns: 1fr;
   }
 }
 

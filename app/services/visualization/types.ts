@@ -11,12 +11,18 @@ export type LegendItem = {
   Label: string;
 };
 
+export type FinalValueBlockModel = {
+  Label: string;
+  Value: string;
+};
+
 export type FinalValueModel = {
   Label: string;
   Notation: string;
   Number: string;
   SequenceText?: string;
   DetailText?: string;
+  Blocks?: FinalValueBlockModel[];
 };
 
 export type SequenceItemModel = {

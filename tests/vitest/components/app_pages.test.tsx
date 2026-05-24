@@ -1,13 +1,15 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router";
 import { describe, expect, it } from "vitest";
 
 import { EuclideanContent } from "~/content/topics/euclidean";
+import { ProcedureView } from "~/components/visualization/procedure_view";
 import { SequenceView } from "~/components/visualization/sequence_view";
 import { FibonacciContent } from "~/content/topics/fibonacci";
 import { PalindromeContent } from "~/content/topics/palindrome";
 import { LandingPage } from "~/pages/landing_page";
+import { BuildEuclideanRun } from "~/services/topics/euclidean";
 import { TopicPage } from "~/pages/topic_page";
 import { BuildFibonacciRun } from "~/services/topics/fibonacci";
 
@@ -114,6 +116,30 @@ describe("page components", () => {
     expect(screen.getByText(/Last nonzero remainder = GCD/i)).toBeInTheDocument();
     expect(
       screen.getByText(/Use the gcd to compute the least common multiple\./i),
+    ).toBeInTheDocument();
+  });
+
+  it("renders Euclidean final results as dedicated gcd, lcm, and details blocks", () => {
+    render(
+      <ProcedureView
+        CurrentStatus=""
+        OnSkip={() => {}}
+        RunModel={BuildEuclideanRun(252, 105)}
+        ShowFinalValue
+        ShowSkipButton={false}
+        VisibleProcedureStepCount={4}
+      />,
+    );
+
+    const FinalValue = screen.getByTestId("procedure-final-value");
+
+    expect(within(FinalValue).getByText("GCD")).toBeInTheDocument();
+    expect(within(FinalValue).getByText("21")).toBeInTheDocument();
+    expect(within(FinalValue).getByText("LCM")).toBeInTheDocument();
+    expect(within(FinalValue).getByText("1,260")).toBeInTheDocument();
+    expect(within(FinalValue).getByText("Details")).toBeInTheDocument();
+    expect(
+      within(FinalValue).getByText("lcm = (252 x 105) / 21 = 1,260"),
     ).toBeInTheDocument();
   });
 });
