@@ -72,7 +72,6 @@ export function TopicPage({ Content }: TopicPageProps) {
           BackLabel={Content.BackLabel}
           Description={Content.HeroDescription}
           Number={Content.Number}
-          Tag={Content.Tag}
           TitleParts={Content.TitleParts}
         />
         <section className="compute-section">
