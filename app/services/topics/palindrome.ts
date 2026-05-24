@@ -8,6 +8,9 @@ function NormalizeCandidateText(CandidateText: string): string {
 export function BuildPalindromeRun(Candidate: string): ProcedureRunModel {
   const CandidateText = Candidate.trim();
   const ComparableText = NormalizeCandidateText(CandidateText);
+  const CandidateDisplay = CandidateText.length > 0 ? CandidateText : "\"\"";
+  const ComparableDisplay =
+    ComparableText.length > 0 ? ComparableText.split("").join(" ") : "(empty string)";
   const Steps: ProcedureStepModel[] = [];
   let LeftIndex = 0;
   let RightIndex = ComparableText.length - 1;
@@ -25,7 +28,17 @@ export function BuildPalindromeRun(Candidate: string): ProcedureRunModel {
     StepNumber += 1;
   }
 
-  if (ComparableText.length <= 1) {
+  if (ComparableText.length === 0) {
+    Steps.push({
+      Id: "empty-string",
+      Label: `Step ${StepNumber}`,
+      Title: "Empty string",
+      Body: "An empty string reads the same forward and backward.",
+      Emphasis: "The candidate is a palindrome.",
+    });
+  }
+
+  if (ComparableText.length === 1) {
     Steps.push({
       Id: "single-character",
       Label: `Step ${StepNumber}`,
@@ -72,8 +85,8 @@ export function BuildPalindromeRun(Candidate: string): ProcedureRunModel {
 
   return BuildProcedureRun(Steps, {
     Label: "Result",
-    Notation: `P = ${CandidateText}`,
+    Notation: `P = ${CandidateDisplay}`,
     Number: IsPalindrome ? "Palindrome" : "Not a palindrome",
-    DetailText: `Compared as: ${ComparableText.split("").join(" ")}`,
+    DetailText: `Compared as: ${ComparableDisplay}`,
   });
 }

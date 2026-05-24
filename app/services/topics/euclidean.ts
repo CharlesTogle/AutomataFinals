@@ -10,12 +10,14 @@ export function BuildEuclideanRun(
   let Divisor = Math.min(FirstValue, SecondValue);
   const OriginalDividend = Dividend;
   const OriginalDivisor = Divisor;
+  const OriginalProduct = OriginalDividend * OriginalDivisor;
   const Steps: ProcedureStepModel[] = [
     {
       Id: "normalize",
       Label: "Step 1",
       Title: "Normalize the inputs",
-      Body: "The larger value starts as m and the smaller value starts as n.",
+      Body:
+        "Start with one division step exactly like the division algorithm: the larger value is m and the smaller value is n.",
       Emphasis: `m = ${FormatNumber(Dividend)}, n = ${FormatNumber(Divisor)}`,
     },
   ];
@@ -29,8 +31,9 @@ export function BuildEuclideanRun(
     Steps.push({
       Id: `loop-${StepNumber}`,
       Label: `Step ${StepNumber}`,
-      Title: "Apply one Euclidean division",
-      Body: "Divide the current m by n, then replace the pair with (n, r).",
+      Title: "Repeat the division algorithm",
+      Body:
+        "Compute m = nq + r, then let the previous divisor become the next dividend and the previous remainder become the next divisor.",
       Emphasis: `${FormatNumber(Dividend)} = ${FormatNumber(Divisor)}(${FormatNumber(Quotient)}) + ${FormatNumber(Remainder)}`,
     });
 
@@ -40,21 +43,23 @@ export function BuildEuclideanRun(
   }
 
   const GreatestCommonDivisor = Dividend;
-  const LeastCommonMultiple =
-    (OriginalDividend * OriginalDivisor) / GreatestCommonDivisor;
+  const LeastCommonMultiple = OriginalProduct / GreatestCommonDivisor;
 
   Steps.push({
     Id: "result",
     Label: `Step ${StepNumber}`,
-    Title: "Read the final values",
-    Body: "The last non-zero divisor is the gcd, and the lcm follows from the product divided by the gcd.",
-    Emphasis: `gcd = ${FormatNumber(GreatestCommonDivisor)}, lcm = ${FormatNumber(LeastCommonMultiple)}`,
+    Title: "Read the gcd and compute the lcm",
+    Body:
+      "When a step gives remainder 0, the previous non-zero remainder is the gcd. Multiply the original integers and divide by the gcd to get the lcm.",
+    Emphasis:
+      `gcd = ${FormatNumber(GreatestCommonDivisor)}, lcm = (${FormatNumber(OriginalDividend)} x ${FormatNumber(OriginalDivisor)}) / ${FormatNumber(GreatestCommonDivisor)} = ${FormatNumber(LeastCommonMultiple)}`,
   });
 
   return BuildProcedureRun(Steps, {
     Label: "Final Result",
     Notation: `gcd(${FormatNumber(OriginalDividend)}, ${FormatNumber(OriginalDivisor)})`,
     Number: FormatNumber(GreatestCommonDivisor),
-    DetailText: `lcm = ${FormatNumber(LeastCommonMultiple)}`,
+    DetailText:
+      `lcm = (${FormatNumber(OriginalDividend)} x ${FormatNumber(OriginalDivisor)}) / ${FormatNumber(GreatestCommonDivisor)} = ${FormatNumber(LeastCommonMultiple)}`,
   });
 }

@@ -83,6 +83,7 @@ function ReadValidatedText(
 
   return ValidateTextInput(FieldValues[FieldKey] ?? "", {
     Label: InputField.Label,
+    MinimumLength: InputField.MinimumLength ?? 1,
     MaximumLength: InputField.MaximumLength,
     Pattern: /^[a-z0-9\s]+$/i,
     AllowedDescription: "letters, digits, and spaces only",

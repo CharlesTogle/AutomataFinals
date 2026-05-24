@@ -1,5 +1,6 @@
 export type TextFieldSpec = {
   Label: string;
+  MinimumLength: number;
   MaximumLength: number;
   Pattern: RegExp;
   AllowedDescription: string;
@@ -21,10 +22,24 @@ export function ValidateTextInput(
 ): TextValidationResult {
   const TrimmedValue = RawValue.trim();
 
-  if (TrimmedValue.length === 0) {
+  if (TrimmedValue.length === 0 && FieldSpec.MinimumLength > 0) {
     return {
       IsValid: false,
       ErrorMessage: `Enter ${FieldSpec.Label.toLowerCase()}.`,
+    };
+  }
+
+  if (TrimmedValue.length < FieldSpec.MinimumLength) {
+    return {
+      IsValid: false,
+      ErrorMessage: `${FieldSpec.Label} must be at least ${FieldSpec.MinimumLength} characters.`,
+    };
+  }
+
+  if (TrimmedValue.length === 0) {
+    return {
+      IsValid: true,
+      ParsedValue: "",
     };
   }
 

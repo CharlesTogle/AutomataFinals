@@ -14,12 +14,12 @@ export const FooterAttribution = {
 } as const;
 
 export const TopicInputLimits = {
-  SequenceTermsMin: 2,
+  SequenceTermsMin: 1,
   SequenceTermsMax: 100_000,
   PositiveIntegerMin: 1,
   PositiveIntegerMax: 999_999,
   PalindromeCandidateMax: 999_999_999,
-  PalindromeCandidateMaxLength: 32,
+  PalindromeCandidateMaxLength: 1_000,
   DivisionOperandMax: 999_999,
   EuclideanOperandMax: 999_999,
   CollatzStartMax: 999_999,

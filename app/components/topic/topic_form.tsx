@@ -55,6 +55,7 @@ export function TopicForm({
                 max={InputType === "number" ? Input.Maximum : undefined}
                 maxLength={InputType === "text" ? Input.MaximumLength : undefined}
                 min={InputType === "number" ? Input.Minimum : undefined}
+                minLength={InputType === "text" ? Input.MinimumLength : undefined}
                 onChange={(Event) => OnFieldChange(Input.Key, Event.target.value)}
                 placeholder={Input.Placeholder}
                 spellCheck={InputType === "text" ? false : undefined}

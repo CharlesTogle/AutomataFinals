@@ -1,11 +1,14 @@
 import { describe, expect, it } from "vitest";
 
+import { FibonacciContent } from "~/content/topics/fibonacci";
+import { PalindromeContent } from "~/content/topics/palindrome";
 import { BuildCollatzRun, BuildCollatzSequence } from "~/services/topics/collatz";
 import { BuildDivisionRun } from "~/services/topics/division";
 import { BuildFibonacciRun, BuildFibonacciSequence } from "~/services/topics/fibonacci";
 import { BuildEuclideanRun } from "~/services/topics/euclidean";
 import { BuildLucasNumbersSequence } from "~/services/topics/lucas_numbers";
 import { BuildPalindromeRun } from "~/services/topics/palindrome";
+import { BuildTopicPresentation } from "~/services/topics/topic_runtime";
 import { BuildTribonacciSequence } from "~/services/topics/tribonacci";
 import { ValidateWholeNumberInput } from "~/services/validation/numeric_input";
 import { ValidateTextInput } from "~/services/validation/text_input";
@@ -13,6 +16,19 @@ import { ValidateTextInput } from "~/services/validation/text_input";
 describe("topic services", () => {
   it("builds the expected Fibonacci sequence", () => {
     expect(BuildFibonacciSequence(8)).toEqual([0, 1, 1, 2, 3, 5, 8, 13]);
+  });
+
+  it("accepts a single Fibonacci term", () => {
+    const RuntimeResult = BuildTopicPresentation(FibonacciContent, {
+      TermCount: "1",
+    });
+
+    expect(RuntimeResult.IsValid).toBe(true);
+
+    if (RuntimeResult.IsValid) {
+      expect(RuntimeResult.Presentation.FinalValue.Notation).toBe("F(0)");
+      expect(RuntimeResult.Presentation.FinalValue.Number).toBe("0");
+    }
   });
 
   it("builds the expected Lucas sequence", () => {
@@ -71,7 +87,7 @@ describe("topic services", () => {
     const RunModel = BuildEuclideanRun(252, 105);
 
     expect(RunModel.FinalValue.Number).toBe("21");
-    expect(RunModel.FinalValue.DetailText).toContain("1,260");
+    expect(RunModel.FinalValue.DetailText).toBe("lcm = (252 x 105) / 21 = 1,260");
   });
 
   it("formats large Euclidean results with comma separators", () => {
@@ -79,12 +95,42 @@ describe("topic services", () => {
 
     expect(RunModel.FinalValue.Notation).toBe("gcd(1,000,000, 10,000)");
     expect(RunModel.FinalValue.Number).toBe("10,000");
-    expect(RunModel.FinalValue.DetailText).toBe("lcm = 1,000,000");
+    expect(RunModel.FinalValue.DetailText).toBe(
+      "lcm = (1,000,000 x 10,000) / 10,000 = 1,000,000",
+    );
+  });
+
+  it("describes Euclidean as repeated division before reading gcd and lcm", () => {
+    const RunModel = BuildEuclideanRun(252, 105);
+    const FinalStep = RunModel.Steps[RunModel.Steps.length - 1];
+
+    expect(RunModel.Steps[1]?.Title).toBe("Repeat the division algorithm");
+    expect(RunModel.Steps[1]?.Body).toContain(
+      "previous divisor become the next dividend",
+    );
+    expect(FinalStep?.Body).toContain("previous non-zero remainder is the gcd");
+    expect(FinalStep?.Body).toContain("divide by the gcd to get the lcm");
   });
 
   it("reports palindrome and non-palindrome outcomes", () => {
     expect(BuildPalindromeRun("Level").FinalValue.Number).toBe("Palindrome");
     expect(BuildPalindromeRun("hello").FinalValue.Number).toBe("Not a palindrome");
+  });
+
+  it("accepts the empty string as a palindrome input", () => {
+    const RuntimeResult = BuildTopicPresentation(PalindromeContent, {
+      Candidate: "",
+    });
+
+    expect(RuntimeResult.IsValid).toBe(true);
+
+    if (RuntimeResult.IsValid) {
+      expect(RuntimeResult.Presentation.FinalValue.Number).toBe("Palindrome");
+      expect(RuntimeResult.Presentation.FinalValue.Notation).toBe('P = ""');
+      expect(RuntimeResult.Presentation.FinalValue.DetailText).toBe(
+        "Compared as: (empty string)",
+      );
+    }
   });
 
   it("normalizes palindrome letter input before comparison", () => {
@@ -152,17 +198,18 @@ describe("numeric validation", () => {
 });
 
 describe("text validation", () => {
-  it("rejects empty text values", () => {
+  it("accepts empty text when the minimum length is 0", () => {
     expect(
       ValidateTextInput("", {
         Label: "Word or text",
-        MaximumLength: 32,
+        MinimumLength: 0,
+        MaximumLength: 1_000,
         Pattern: /^[a-z0-9\s]+$/i,
         AllowedDescription: "letters, digits, and spaces only",
       }),
     ).toEqual({
-      IsValid: false,
-      ErrorMessage: "Enter word or text.",
+      IsValid: true,
+      ParsedValue: "",
     });
   });
 
@@ -170,7 +217,8 @@ describe("text validation", () => {
     expect(
       ValidateTextInput("race-car", {
         Label: "Word or text",
-        MaximumLength: 32,
+        MinimumLength: 0,
+        MaximumLength: 1_000,
         Pattern: /^[a-z0-9\s]+$/i,
         AllowedDescription: "letters, digits, and spaces only",
       }),
@@ -180,17 +228,18 @@ describe("text validation", () => {
     });
   });
 
-  it("accepts letters for palindrome text", () => {
+  it("rejects palindrome text that exceeds the maximum length", () => {
     expect(
-      ValidateTextInput("Racecar", {
+      ValidateTextInput("a".repeat(1_001), {
         Label: "Word or text",
-        MaximumLength: 32,
+        MinimumLength: 0,
+        MaximumLength: 1_000,
         Pattern: /^[a-z0-9\s]+$/i,
         AllowedDescription: "letters, digits, and spaces only",
       }),
     ).toEqual({
-      IsValid: true,
-      ParsedValue: "Racecar",
+      IsValid: false,
+      ErrorMessage: "Word or text must be at most 1000 characters.",
     });
   });
 });
