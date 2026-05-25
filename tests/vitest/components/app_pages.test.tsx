@@ -10,6 +10,7 @@ import { FibonacciContent } from "~/content/topics/fibonacci";
 import { PalindromeContent } from "~/content/topics/palindrome";
 import { LandingPage } from "~/pages/landing_page";
 import { BuildEuclideanRun } from "~/services/topics/euclidean";
+import { BuildPalindromeRun } from "~/services/topics/palindrome";
 import { TopicPage } from "~/pages/topic_page";
 import { BuildFibonacciRun } from "~/services/topics/fibonacci";
 
@@ -140,6 +141,30 @@ describe("page components", () => {
     expect(within(FinalValue).getByText("Details")).toBeInTheDocument();
     expect(
       within(FinalValue).getByText("lcm = (252 x 105) / 21 = 1,260"),
+    ).toBeInTheDocument();
+  });
+
+  it("renders emphasized palindrome comparison letters and mismatch guidance", () => {
+    render(
+      <ProcedureView
+        CurrentStatus=""
+        OnSkip={() => {}}
+        RunModel={BuildPalindromeRun("racetar")}
+        ShowFinalValue={false}
+        ShowSkipButton={false}
+        VisibleProcedureStepCount={3}
+      />,
+    );
+
+    const FocusCharacters = screen.getAllByText(/^[crta]$/i);
+    const MismatchCharacters = FocusCharacters.slice(-2);
+
+    expect(MismatchCharacters[0]).toHaveTextContent("c");
+    expect(MismatchCharacters[0]).toHaveClass("procedure-step-copy-focus");
+    expect(MismatchCharacters[1]).toHaveTextContent("t");
+    expect(MismatchCharacters[1]).toHaveClass("procedure-step-copy-focus");
+    expect(
+      screen.getByText(/process stops and the candidate is not a palindrome/i),
     ).toBeInTheDocument();
   });
 });

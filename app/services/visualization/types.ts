@@ -57,11 +57,17 @@ export type SequenceRunModel = {
   FinalValue: FinalValueModel;
 };
 
+export type ProcedureCopyPartModel = {
+  Text: string;
+  Tone?: "focus";
+};
+
 export type ProcedureStepModel = {
   Id: string;
   Label: string;
   Title: string;
   Body: string;
+  BodyParts?: ProcedureCopyPartModel[];
   Emphasis?: string;
 };
 

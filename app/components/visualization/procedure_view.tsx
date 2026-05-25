@@ -1,4 +1,7 @@
-import type { ProcedureRunModel } from "~/services/visualization/types";
+import type {
+  ProcedureCopyPartModel,
+  ProcedureRunModel,
+} from "~/services/visualization/types";
 
 import { SkipButton } from "./skip_button";
 
@@ -10,6 +13,24 @@ type ProcedureViewProps = {
   VisibleProcedureStepCount: number;
   OnSkip: () => void;
 };
+
+function RenderProcedureCopy(
+  Body: string,
+  BodyParts?: ProcedureCopyPartModel[],
+) {
+  if (!BodyParts || BodyParts.length === 0) {
+    return Body;
+  }
+
+  return BodyParts.map((Part, Index) => (
+    <span
+      className={Part.Tone === "focus" ? "procedure-step-copy-focus" : undefined}
+      key={`${Part.Text}-${Index}`}
+    >
+      {Part.Text}
+    </span>
+  ));
+}
 
 export function ProcedureView({
   RunModel,
@@ -50,7 +71,9 @@ export function ProcedureView({
                   <span className="procedure-step-label">{Step.Label}</span>
                   <span className="procedure-step-value">{Step.Title}</span>
                 </div>
-                <p className="procedure-step-copy">{Step.Body}</p>
+                <p className="procedure-step-copy">
+                  {RenderProcedureCopy(Step.Body, Step.BodyParts)}
+                </p>
                 {Step.Emphasis ? (
                   <p className="procedure-step-equation">{Step.Emphasis}</p>
                 ) : null}

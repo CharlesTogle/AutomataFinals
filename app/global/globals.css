@@ -1827,6 +1827,14 @@ button {
   font-size: var(--text-sm);
 }
 
+.procedure-step-copy-focus {
+  color: var(--clr-text);
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  font-weight: 700;
+  line-height: 1;
+}
+
 .procedure-final {
   display: grid;
   gap: var(--sp-3);

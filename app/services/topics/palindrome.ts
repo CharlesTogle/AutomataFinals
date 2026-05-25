@@ -1,8 +1,34 @@
 import { BuildProcedureRun } from "../visualization/procedure_steps";
-import type { ProcedureRunModel, ProcedureStepModel } from "../visualization/types";
+import type {
+  ProcedureCopyPartModel,
+  ProcedureRunModel,
+  ProcedureStepModel,
+} from "../visualization/types";
 
 function NormalizeCandidateText(CandidateText: string): string {
   return CandidateText.toLowerCase().replace(/\s+/g, "");
+}
+
+function BuildComparisonBodyParts(
+  LeftCharacter: string,
+  RightCharacter: string,
+): ProcedureCopyPartModel[] {
+  return [
+    {
+      Text: LeftCharacter,
+      Tone: "focus",
+    },
+    {
+      Text: " on the left is compared with ",
+    },
+    {
+      Text: RightCharacter,
+      Tone: "focus",
+    },
+    {
+      Text: " on the right.",
+    },
+  ];
 }
 
 export function BuildPalindromeRun(Candidate: string): ProcedureRunModel {
@@ -58,9 +84,10 @@ export function BuildPalindromeRun(Candidate: string): ProcedureRunModel {
       Label: `Step ${StepNumber}`,
       Title: `Compare positions ${LeftIndex + 1} and ${RightIndex + 1}`,
       Body: `${LeftCharacter} on the left is compared with ${RightCharacter} on the right.`,
+      BodyParts: BuildComparisonBodyParts(LeftCharacter, RightCharacter),
       Emphasis: CharactersMatch
         ? "The characters match, so the pointers move inward."
-        : "The characters differ, so the process stops here.",
+        : "The characters do not match, so the process stops and the candidate is not a palindrome.",
     });
 
     if (!CharactersMatch) {

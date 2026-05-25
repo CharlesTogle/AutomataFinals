@@ -145,6 +145,21 @@ describe("topic services", () => {
       "Compared as: n e v e r o d d o r e v e n",
     );
   });
+
+  it("describes the unequal palindrome comparison before stopping", () => {
+    const RunModel = BuildPalindromeRun("racetar");
+    const FinalStep = RunModel.Steps[RunModel.Steps.length - 1];
+
+    expect(FinalStep?.Title).toBe("Compare positions 3 and 5");
+    expect(FinalStep?.Body).toBe("c on the left is compared with t on the right.");
+    expect(FinalStep?.BodyParts).toEqual([
+      { Text: "c", Tone: "focus" },
+      { Text: " on the left is compared with " },
+      { Text: "t", Tone: "focus" },
+      { Text: " on the right." },
+    ]);
+    expect(FinalStep?.Emphasis).toContain("candidate is not a palindrome");
+  });
 });
 
 describe("numeric validation", () => {
