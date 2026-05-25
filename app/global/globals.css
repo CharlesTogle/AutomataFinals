@@ -1367,6 +1367,7 @@ button {
   display: flex;
   justify-content: center;
   align-items: flex-start;
+  flex-wrap: nowrap;
   gap: var(--sp-4);
   margin-bottom: var(--sp-4);
 }
