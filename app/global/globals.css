@@ -1366,18 +1366,28 @@ button {
 .compute-form {
   display: flex;
   justify-content: center;
-  align-items: flex-end;
-  flex-wrap: wrap;
+  align-items: flex-start;
   gap: var(--sp-4);
   margin-bottom: var(--sp-4);
 }
 
 .compute-form-fields {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
   gap: var(--sp-4);
-  flex: 0 1 48rem;
-  width: min(100%, 48rem);
+  min-width: 0;
+  width: 100%;
+}
+
+.compute-form[data-field-count="1"] .compute-form-fields {
+  grid-template-columns: minmax(0, 1fr);
+  flex: 1 1 48rem;
+  max-width: 48rem;
+}
+
+.compute-form[data-field-count="2"] .compute-form-fields {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  flex: 1 1 42rem;
+  max-width: 42rem;
 }
 
 .form-group {
@@ -1387,6 +1397,7 @@ button {
 }
 
 .compute-form .form-group {
+  width: 100%;
   min-width: 0;
 }
 
@@ -1432,7 +1443,8 @@ button {
   display: flex;
   gap: var(--sp-3);
   flex-shrink: 0;
-  align-self: flex-end;
+  align-self: flex-start;
+  margin-top: calc((var(--text-sm) * 1.65) + var(--sp-2));
 }
 
 .btn {
@@ -1930,13 +1942,18 @@ button {
     align-items: stretch;
   }
 
+  .topic-actions {
+    margin-top: 0;
+  }
+
   .compute-form .form-group {
     width: 100%;
   }
 
   .compute-form-fields {
     width: 100%;
-    flex-basis: 100%;
+    max-width: none;
+    flex-basis: auto;
     grid-template-columns: 1fr;
   }
 

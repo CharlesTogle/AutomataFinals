@@ -26,10 +26,13 @@ export function TopicForm({
   OnReset,
   FormIdPrefix,
 }: TopicFormProps) {
+  const FieldCount = Inputs.length;
+
   return (
     <>
       <form
         className="compute-form anim-fade-up anim-delay-4"
+        data-field-count={FieldCount}
         noValidate
         onReset={OnReset}
         onSubmit={OnCompute}
