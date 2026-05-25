@@ -145,6 +145,7 @@ export function UseTopicRunner() {
     (NextRunModel: Extract<TopicRunModel, { Kind: "procedure" }>) => {
       const RunStep = (StepIndex: number) => {
         if (StepIndex >= NextRunModel.Steps.length) {
+          SetVisibleProcedureStepCount(NextRunModel.Steps.length);
           CompleteRun();
           return;
         }

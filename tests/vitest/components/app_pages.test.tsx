@@ -1,7 +1,7 @@
-import { render, screen, within } from "@testing-library/react";
+import { act, fireEvent, render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router";
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { EuclideanContent } from "~/content/topics/euclidean";
 import { ProcedureView } from "~/components/visualization/procedure_view";
@@ -13,6 +13,10 @@ import { BuildEuclideanRun } from "~/services/topics/euclidean";
 import { BuildPalindromeRun } from "~/services/topics/palindrome";
 import { TopicPage } from "~/pages/topic_page";
 import { BuildFibonacciRun } from "~/services/topics/fibonacci";
+
+afterEach(() => {
+  vi.useRealTimers();
+});
 
 describe("page components", () => {
   it("renders the landing page with all topic cards", () => {
@@ -91,6 +95,30 @@ describe("page components", () => {
     expect(screen.getByTestId("input-Candidate")).toHaveAttribute("minlength", "0");
   });
 
+  it("marks single-input and two-input topic forms for the shared layout rules", () => {
+    const FibonacciPage = render(
+      <MemoryRouter>
+        <TopicPage Content={FibonacciContent} />
+      </MemoryRouter>,
+    );
+
+    expect(FibonacciPage.container.querySelector(".compute-form")).toHaveAttribute(
+      "data-field-count",
+      "1",
+    );
+
+    const EuclideanPage = render(
+      <MemoryRouter>
+        <TopicPage Content={EuclideanContent} />
+      </MemoryRouter>,
+    );
+
+    expect(EuclideanPage.container.querySelector(".compute-form")).toHaveAttribute(
+      "data-field-count",
+      "2",
+    );
+  });
+
   it("renders scholarly citations on topic pages without the landing references block", () => {
     render(
       <MemoryRouter>
@@ -165,6 +193,36 @@ describe("page components", () => {
     expect(MismatchCharacters[1]).toHaveClass("procedure-step-copy-focus");
     expect(
       screen.getByText(/process stops and the candidate is not a palindrome/i),
+    ).toBeInTheDocument();
+  });
+
+  it("keeps the uppercase palindrome mismatch step visible after the animated run completes", () => {
+    vi.useFakeTimers();
+
+    render(
+      <MemoryRouter>
+        <TopicPage Content={PalindromeContent} />
+      </MemoryRouter>,
+    );
+
+    act(() => {
+      fireEvent.change(screen.getByTestId("input-Candidate"), {
+        target: { value: "Racetar" },
+      });
+      fireEvent.click(screen.getByTestId("compute-button"));
+      vi.advanceTimersByTime(4_000);
+    });
+
+    expect(screen.getByText("Compare positions 3 and 5")).toBeInTheDocument();
+    expect(
+      screen.getByText(/process stops and the candidate is not a palindrome/i),
+    ).toBeInTheDocument();
+    expect(screen.getByText("Stop at the mismatch")).toBeInTheDocument();
+    expect(
+      screen.getByText(/mirrored comparison fails here/i),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText("Compared as: r a c e t a r. First mismatch: c != t at positions 3 and 5."),
     ).toBeInTheDocument();
   });
 });

@@ -132,7 +132,7 @@ describe("topic services", () => {
       expect(RuntimeResult.Presentation.FinalValue.Number).toBe("Palindrome");
       expect(RuntimeResult.Presentation.FinalValue.Notation).toBe('P = ""');
       expect(RuntimeResult.Presentation.FinalValue.DetailText).toBe(
-        "Compared as: (empty string)",
+        "Compared as: (empty string).",
       );
     }
   });
@@ -142,23 +142,37 @@ describe("topic services", () => {
 
     expect(RunModel.FinalValue.Number).toBe("Palindrome");
     expect(RunModel.FinalValue.DetailText).toBe(
-      "Compared as: n e v e r o d d o r e v e n",
+      "Compared as: n e v e r o d d o r e v e n.",
     );
   });
 
   it("describes the unequal palindrome comparison before stopping", () => {
     const RunModel = BuildPalindromeRun("racetar");
+    const ComparisonStep = RunModel.Steps[RunModel.Steps.length - 2];
     const FinalStep = RunModel.Steps[RunModel.Steps.length - 1];
 
-    expect(FinalStep?.Title).toBe("Compare positions 3 and 5");
-    expect(FinalStep?.Body).toBe("c on the left is compared with t on the right.");
-    expect(FinalStep?.BodyParts).toEqual([
+    expect(ComparisonStep?.Title).toBe("Compare positions 3 and 5");
+    expect(ComparisonStep?.Body).toBe("c on the left is compared with t on the right.");
+    expect(ComparisonStep?.BodyParts).toEqual([
       { Text: "c", Tone: "focus" },
       { Text: " on the left is compared with " },
       { Text: "t", Tone: "focus" },
       { Text: " on the right." },
     ]);
-    expect(FinalStep?.Emphasis).toContain("candidate is not a palindrome");
+    expect(ComparisonStep?.Emphasis).toContain("candidate is not a palindrome");
+    expect(FinalStep?.Title).toBe("Stop at the mismatch");
+    expect(FinalStep?.BodyParts).toEqual([
+      { Text: "c", Tone: "focus" },
+      { Text: " and " },
+      { Text: "t", Tone: "focus" },
+      { Text: " do not match, so the mirrored comparison fails here." },
+    ]);
+    expect(FinalStep?.Emphasis).toBe(
+      "The candidate is not a palindrome because positions 3 and 5 do not match.",
+    );
+    expect(RunModel.FinalValue.DetailText).toBe(
+      "Compared as: r a c e t a r. First mismatch: c != t at positions 3 and 5.",
+    );
   });
 });
 

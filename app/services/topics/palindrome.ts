@@ -31,6 +31,28 @@ function BuildComparisonBodyParts(
   ];
 }
 
+function BuildMismatchBodyParts(
+  LeftCharacter: string,
+  RightCharacter: string,
+): ProcedureCopyPartModel[] {
+  return [
+    {
+      Text: LeftCharacter,
+      Tone: "focus",
+    },
+    {
+      Text: " and ",
+    },
+    {
+      Text: RightCharacter,
+      Tone: "focus",
+    },
+    {
+      Text: " do not match, so the mirrored comparison fails here.",
+    },
+  ];
+}
+
 export function BuildPalindromeRun(Candidate: string): ProcedureRunModel {
   const CandidateText = Candidate.trim();
   const ComparableText = NormalizeCandidateText(CandidateText);
@@ -42,6 +64,7 @@ export function BuildPalindromeRun(Candidate: string): ProcedureRunModel {
   let RightIndex = ComparableText.length - 1;
   let StepNumber = 1;
   let IsPalindrome = true;
+  let MismatchDetail = "";
 
   if (ComparableText !== CandidateText) {
     Steps.push({
@@ -92,6 +115,15 @@ export function BuildPalindromeRun(Candidate: string): ProcedureRunModel {
 
     if (!CharactersMatch) {
       IsPalindrome = false;
+      Steps.push({
+        Id: "mismatch-found",
+        Label: `Step ${StepNumber + 1}`,
+        Title: "Stop at the mismatch",
+        Body: `${LeftCharacter} and ${RightCharacter} do not match, so the mirrored comparison fails here.`,
+        BodyParts: BuildMismatchBodyParts(LeftCharacter, RightCharacter),
+        Emphasis: `The candidate is not a palindrome because positions ${LeftIndex + 1} and ${RightIndex + 1} do not match.`,
+      });
+      MismatchDetail = ` First mismatch: ${LeftCharacter} != ${RightCharacter} at positions ${LeftIndex + 1} and ${RightIndex + 1}.`;
       break;
     }
 
@@ -114,6 +146,6 @@ export function BuildPalindromeRun(Candidate: string): ProcedureRunModel {
     Label: "Result",
     Notation: `P = ${CandidateDisplay}`,
     Number: IsPalindrome ? "Palindrome" : "Not a palindrome",
-    DetailText: `Compared as: ${ComparableDisplay}`,
+    DetailText: `Compared as: ${ComparableDisplay}.${MismatchDetail}`,
   });
 }
